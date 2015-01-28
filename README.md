@@ -23,6 +23,10 @@ See https://github.com/stephens999/dscr-example for an example of a repo set up 
 
 # Instructions Template
 
+Edit this template to provide specific details on your own DSC.
+I have included some instructions that might be generically applicable and useful for all DSCs (eg how to
+add a method, how to add a scenario).
+
 # Background 
 
 For a general introduction to DSCs, see [here](https://github.com/stephens999/dscr/blob/master/intro.md).
