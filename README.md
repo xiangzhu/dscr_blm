@@ -1,5 +1,5 @@
-# dscr-template
-a template repository for a dynamic statistical comparison
+# dscr\_blm
+a repository for a dynamic statistical comparison of Bayesian linear model fitting procedures and their applications in genetic association studies
 
 ## An example
 
