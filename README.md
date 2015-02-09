@@ -1,10 +1,6 @@
 # dscr\_blm
 a repository for a dynamic statistical comparison of Bayesian linear model fitting procedures and their applications in genetic association studies
 
-## An example
-
-See https://github.com/stephens999/dscr-example for an example of a repo set up using this template 
-
 ## How to use this to set up a new DSC
 
 1. Copy this repo. For example, suppose you want to call your repo `dscr-example` and host it on github. You could do the following:
