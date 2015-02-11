@@ -15,12 +15,13 @@ datamaker = function(seed,args){
   # 1. prep genotype/phenotype (design matrix/response vector)
   if(Dmod=="insilico"){
 	library(varbvs)
-	Ntol = args$total.size
-	resd = args$residual.sd
-	Nsnp = args$num.allsnp
-	Ncau = args$num.causal
+	Ntol = args$total.size # total sample size
+	resv = args$residual.var # residual variance
+	Nsnp = args$num.allsnp # total number of snps 
+	Ncau = args$num.causal # total number of causal variants
+
 	snps = create.snps(Nsnp, Ncau)
-	data = create.data(snps$maf, snps$beta, resd, N)
+	data = create.data(snps$maf, snps$beta, resv, Ntol)
 
 	X = data$X
 	y = data$y
