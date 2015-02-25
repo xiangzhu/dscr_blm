@@ -44,10 +44,31 @@ gemma.bslmm.wrapper = function(input, args){
   # step 2: make a system command to fit bslmm model in gemma
   
   model_fitting_command = "./gemma -g genotype.txt -p phenotype.txt -o result"
-  # choose the model to fit
-  model_fitting_command = paste(model_fitting_command, "-bslmm", model_type)
-  # choose the length of sampling and burn-in
-  model_fitting_command = paste(model_fitting_command, "-s", sample_step, "-w", burnin_step)
+  # choose the model type
+  model_fitting_command = paste(model_fitting_command, "-bslmm", bslmm)
+  # choose the min/max for h
+  model_fitting_command = paste(model_fitting_command, "-hmin", hmin, "-hmax", hmax)
+  # choose the min/max for rho
+  model_fitting_command = paste(model_fitting_command, "-rmin", rmin, "-rmax", rmax)
+  # choose the min/max for log10(pi)
+  model_fitting_command = paste(model_fitting_command, "-pmin", pmin, "-pmax", pmax)
+  # choose the min/max for |gamma|
+  model_fitting_command = paste(model_fitting_command, "-smin", smin, "-smax", smax)
+  # choose the mean for the geometric distribution
+  model_fitting_command = paste(model_fitting_command, "-gmean", gmean)
+  # choose the step size for the proposal of h
+  model_fitting_command = paste(model_fitting_command, "-hscale", hscale)
+  # choose the step size for the proposal of rho
+  model_fitting_command = paste(model_fitting_command, "-rscale", rscale)
+  # choose the step size for the proposal of log10(pi)
+  model_fitting_command = paste(model_fitting_command, "-pscale", pscale)
+  # choose the burn-in and sampling steps
+  model_fitting_command = paste(model_fitting_command, "-w", w, "-s", s)
+  # choose the recording and writting pace
+  model_fitting_command = paste(model_fitting_command, "-rpace", rpace, "-wpace", wpace)
+  # choose the random seed and number of MH steps in each iteration
+  # choose the burn-in and sampling steps
+  model_fitting_command = paste(model_fitting_command, "-seed", seed, "-mh", mh)
   # run gemma to fit the model
   system(model_fitting_command)
   
