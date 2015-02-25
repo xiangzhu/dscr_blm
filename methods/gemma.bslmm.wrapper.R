@@ -12,10 +12,28 @@ gemma.bslmm.wrapper = function(input, args){
   Xtrn = input$X.train
   ytrn = input$y.train
   
+  # defaul setting for bslmm (see manual for GEMMA)
+  bslmm = 1
+  hmin = 0
+  hmax = 1
+  rmin = 0
+  rmax = 1
+  pmin = log10(1/p)
+  pmax = log10(1)
+  smin = 0
+  smax = 300
+  gmean = 2000
+  hscale = min(10/sqrt(n),1)
+  rscale = min(10/sqrt(n),1)
+  pscale = min(5/sqrt(n),1)
+  w = 1e5
+  s = 1e6
+  rpace = 10
+  wpace = 1e3
+  seed = sample(1:1e5, 1) # randomly generate a seed
+  mh = 10
+  
   # specify the flags for bslmm
-  model_type = args$model_type
-  sample_step = args$sample_step
-  burnin_step = args$burnin_step
   
   # fit the model by gemma (binary exe)
   
