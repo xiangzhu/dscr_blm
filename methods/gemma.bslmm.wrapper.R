@@ -2,17 +2,18 @@
 #each method should take arguments input and args, like the example
 #the output should be a list of the appropriate "output" format (defined in the README)
 
-linear.predict.wrapper = function(X, beta){
-  y.predict = X %*% beta
-  return(y.predict)
-}
-
 gemma.bslmm.wrapper = function(input, args){
   
-  Xtrn = input$X.train
-  ytrn = input$y.train
+  # load in the dataset
+  X = input$X
+  y = input$y
   
-  # defaul setting for bslmm (see manual for GEMMA)
+  # create a test dataset
+  whichNa = input$row.test
+  yNa = y
+  yNa[whichNa] = NA
+
+  # defaul setting for bslmm (see manual for gemma)
   bslmm = 1
   hmin = 0
   hmax = 1
@@ -38,12 +39,12 @@ gemma.bslmm.wrapper = function(input, args){
   # fit the model by gemma (binary exe)
   
   # step 1: write (Xtrn, ytrn) to txt files and save them in a format as gemma required
-  write.table(Xtrn, file="genotype.txt")
-  write.table(ytrn, file="phenotype.txt")
+  write.table(X, file="genotype.txt")
+  write.table(yNa, file="phenotype.txt", row.names=FALSE, col.names=FALSE)
   
   # step 2: make a system command to fit bslmm model in gemma
   
-  model_fitting_command = "./gemma -g genotype.txt -p phenotype.txt -o result"
+  model_fitting_command = "./gemma -g genotype.txt -p phenotype.txt -o result -epm result.param.txt -emu result.log.txt -predict 1"
   # choose the model type
   model_fitting_command = paste(model_fitting_command, "-bslmm", bslmm)
   # choose the min/max for h
@@ -67,7 +68,6 @@ gemma.bslmm.wrapper = function(input, args){
   # choose the recording and writting pace
   model_fitting_command = paste(model_fitting_command, "-rpace", rpace, "-wpace", wpace)
   # choose the random seed and number of MH steps in each iteration
-  # choose the burn-in and sampling steps
   model_fitting_command = paste(model_fitting_command, "-seed", seed, "-mh", mh)
   # run gemma to fit the model
   system(model_fitting_command)
@@ -86,7 +86,7 @@ gemma.bslmm.wrapper = function(input, args){
   betasam = parsam[, 6]
   gammasam = parsam[, 7]
   
-  effectsam = alphasam + betasam * gammasam # total effect size estimate in GEMMA-BSLMM
+  effectsam = alphasam + betasam * gammasam # total effect size estimate in gemma-bslmm
   
   # output the phenotype prediction function
   beta.bslmm <- mean(effectsam); 
