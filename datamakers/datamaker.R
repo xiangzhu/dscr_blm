@@ -2,10 +2,8 @@
 #each datamaker should take input seed (integer) and args (list), and output a list with names elements meta and input
 #the format of the meta and input elements should be defined in the README
 
-datamaker = function(seed,args){
+datamaker = function(args){
 
-  set.seed(seed)
-  
   #here insert the meat of the function that needs to be defined for each dsc to be done
   #Your function should define the variables meta (a list) and input (a list)
  
@@ -44,17 +42,18 @@ datamaker = function(seed,args){
 	trait.id = args$column.id # pick one trait (CD8+ or MCH)
 
 	# phenotype vector
-	traits = as.matrix(data.table::fread("mouse_hs1940.pheno.txt"))
+	traits = as.matrix(data.table::fread("mouse/mouse_hs1940.pheno.txt"))
 	trait = traits[, trait.id]
 	NonNAindex = which(!is.na(trait))
 	y = trait[NonNAindex]
 
 	# relatedness matrix
-	cXX = as.matrix(read.table("mouse_hs1940.cXX.txt"))
+	cXX = as.matrix(read.table("mouse/mouse_hs1940.cXX.txt"))
 	Z = cXX[NonNAindex, NonNAindex] 
 
 	# genotype matrix
-	mean.genotype = as.matrix(read.table("mouse_hs1940.geno.X.txt"))
+	mean.genotype = read.table(gzfile("mouse/mouse_hs1940.geno.txt.gz"), sep=",", colClasses=c(rep("character", 3), rep("numeric", 1940)))
+	mean.genotype.only = mean.genotype[, 4:1943]
 	
 	
   }
