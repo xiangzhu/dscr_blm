@@ -11,51 +11,57 @@ datamaker = function(seed,args){
  
   Ntst = args$test.size # test sample size
   Dmod = args$data.mode # types of genotypes/phenotypes data: simulated or real
+  Tmod = args$tool.mode # types of software packages: R or binary exe
 
   # 1. prep genotype/phenotype (design matrix/response vector)
-  if(Dmod=="insilico"){
+
+  if(Dmod=="indep"){
 	library(varbvs)
-	Ntol = args$total.size # total sample size
+	Ntol = args$total.size   # total sample size
 	resv = args$residual.var # residual variance
-	Nsnp = args$num.allsnp # total number of snps 
-	Ncau = args$num.causal # total number of causal variants
+	Nsnp = args$num.allsnp 	 # total number of snps 
+	Ncau = args$num.causal 	 # total number of causal variants
 
 	snps = create.snps(Nsnp, Ncau)
 	data = create.data(snps$maf, snps$beta, resv, Ntol)
 
-	X = data$X
-	y = data$y
-
-	Ntrn = Ntol - Ntst
-	if(Ntrn <= 0) stop("training sample should contain at least one individual!")
-	
-	Xtrn = X[1:Ntrn, ]
-	Xtst = X[(Ntrn+1):Ntol, ]
-
-	ytrn = y[1:Ntrn]
-	ytst = y[(Ntrn+1):Ntol]
-
+	X = data$X # genotype matrix
+	y = data$y # phenotype vector
+	Z = NULL   # relatedness matrix
   }
 
   if(Dmod=="wheat"){
 	library(BLR)
 	data(wheat)
-	Envr = args$column.id
+	envrt.id = args$column.id # pick one environment (four available)
 	
-	X = X
-	y = Y[, Envr]
-
-	Itst = sample(1:length(y), size=Ntst, replace=FALSE)
-	Itrn = setdiff(1:length(y), Itst)
-
-	Xtrn = X[Itrn, ]
-	Xtst = X[Itst, ]
-
-	ytrn = y[Itrn]
-	ytst = y[Itst]
-
+	X = X		    # genotype matrix
+	y = Y[, envrt.id]   # phenotype matrix
+	Z = A		    # relatedness matrix
   }
 
+  if(Tmod=="rtool" & Dmod=="mouse"){
+	trait.id = args$column.id # pick one trait (CD8+ or MCH)
+
+	# phenotype vector
+	traits = as.matrix(data.table::fread("mouse_hs1940.pheno.txt"))
+	trait = traits[, trait.id]
+	NonNAindex = which(!is.na(trait))
+	y = trait[NonNAindex]
+
+	# relatedness matrix
+	cXX = as.matrix(read.table("mouse_hs1940.cXX.txt"))
+	Z = cXX[NonNAindex, NonNAindex] 
+
+	# genotype matrix
+	mean.genotype = as.matrix(read.table("mouse_hs1940.geno.X.txt"))
+	
+	
+  }
+
+  if(Tmod=="rtool" & Dmod=="piggy"){
+
+  }
   
   # 2. aggregate output args
   meta = list(X.test=Xtst, y.test=ytst);
