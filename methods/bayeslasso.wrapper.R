@@ -34,19 +34,31 @@ bayeslasso.wrapper = function(input, args){
   #nIter = 5500
   #burnIn = 500
   #thin = 1
-  priorBL = list(varE=list(df=3,S=2.5),
+  priorBL.default = list(varE=list(df=3,S=2.5),
 		 varU=list(df=3,S=0.63),
 		 lambda = list(shape=0.52,rate=1e-5,value=20,type='random'))
 
   # user-specified setting for blr routine
-  if(!is.null(args$nIter))
+  if(!is.null(args$nIter)){
 	nIter = args$nIter
-  if(!is.null(args$burnIn))
+  }else{
+	nIter = 5500
+  }
+  if(!is.null(args$burnIn)){
 	burnIn = args$burnIn
-  if(!is.null(args$thin))
+  }else{
+	burnIn = 500
+  }
+  if(!is.null(args$thin)){
 	thin = args$thin
-  if(length(args$priorBL) != 0)
+  }else{
+	thin = 1
+  }
+  if(length(args$priorBL) != 0){
 	priorBL = args$priorBL
+  }else{
+	priorBL = priorBL.default
+  }
 
   # create a test set: rmv the observed phenotype
   whichNA = input$test.subject
