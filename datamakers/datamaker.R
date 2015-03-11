@@ -7,65 +7,23 @@ datamaker = function(args){
   #here insert the meat of the function that needs to be defined for each dsc to be done
   #Your function should define the variables meta (a list) and input (a list)
  
-  Ntst = args$test.size # test sample size
-  Dmod = args$data.mode # types of genotypes/phenotypes data: simulated or real
-  Tmod = args$tool.mode # types of software packages: R or binary exe
+  test.size = args$test.size # test sample size
+  data.name = args$data.name # name of data set
+  phenotype.id = args$phenotype.id # id of phenotype
 
-  # 1. prep genotype/phenotype (design matrix/response vector)
-
-  if(Dmod=="indep"){
-	library(varbvs)
-	Ntol = args$total.size   # total sample size
-	resv = args$residual.var # residual variance
-	Nsnp = args$num.allsnp 	 # total number of snps 
-	Ncau = args$num.causal 	 # total number of causal variants
-
-	snps = create.snps(Nsnp, Ncau)
-	data = create.data(snps$maf, snps$beta, resv, Ntol)
-
-	X = data$X # genotype matrix
-	y = data$y # phenotype vector
-	Z = NULL   # relatedness matrix
+  phenotype.path = paste0(data.name, '/', 'phenotype_', phenotype.id, '.RData')
+  load(phenotype.path)
+  total.size = length(y)	
+  if(test.size >= total.size){
+	test.size = total.size - 1
+	warning("test sample size is adjusted: total sample size minus 1")
   }
+  test.subject = sample(1:total.size, size=test.size, replace=FALSE)
+  y.test.true = y[test.subject]	
 
-  if(Dmod=="wheat"){
-	library(BLR)
-	data(wheat)
-	envrt.id = args$column.id # pick one environment (four available)
-	
-	X = X		    # genotype matrix
-	y = Y[, envrt.id]   # phenotype matrix
-	Z = A		    # relatedness matrix
-  }
-
-  if(Tmod=="rtool" & Dmod=="mouse"){
-	trait.id = args$column.id # pick one trait (CD8+ or MCH)
-
-	# phenotype vector
-	traits = as.matrix(data.table::fread("mouse/mouse_hs1940.pheno.txt"))
-	trait = traits[, trait.id]
-	NonNAindex = which(!is.na(trait))
-	y = trait[NonNAindex]
-
-	# relatedness matrix
-	cXX = as.matrix(read.table("mouse/mouse_hs1940.cXX.txt"))
-	Z = cXX[NonNAindex, NonNAindex] 
-
-	# genotype matrix
-	mean.genotype = read.table(gzfile("mouse/mouse_hs1940.geno.txt.gz"), sep=",", colClasses=c(rep("character", 3), rep("numeric", 1940)))
-	mean.genotype.only = mean.genotype[, 4:1943]
-	
-	
-  }
-
-  if(Tmod=="rtool" & Dmod=="piggy"){
-
-  }
-  
-  # 2. aggregate output args
-  meta = list(X.test=Xtst, y.test=ytst);
-  input = list(X.train=Xtrn, y.train=ytrn);  
-    
+  input = list(data.name=data.name, phenotype.id=phenotype.id, test.subject=test.subject)
+  meta = list(true.value = y.test.true)
+      
   #end of meat of function
   
   data = list(meta=meta,input=input)
