@@ -6,7 +6,7 @@ bayeslasso.wrapper = function(input, args){
 
   # locate the dataset
   data.name = input$data.name
-  data.path = paste0('../datamakers/', data.name, '/')
+  data.path = paste0('datamakers/', data.name, '/')
 
   # load in the dataset
   genotype.path = paste0(data.path, 'genotype.RData')
@@ -69,6 +69,8 @@ bayeslasso.wrapper = function(input, args){
   }else{
 	fm=BLR(y=YNA, XL=X, GF=list(ID=(1:nrow(A)),A=A), prior=priorBL, nIter=nIter, burnIn=burnIn, thin=thin, saveAt="result_")
   }
+  
+  system('rm result_lambda.dat result_varE.dat')
 
   # output the posterior mean as predicted value
   y.test.predict = fm$yHat[whichNA]

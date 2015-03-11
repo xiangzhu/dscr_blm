@@ -6,7 +6,7 @@ gemma.bslmm.wrapper = function(input, args){
 	
   # locate the dataset
   data.name = input$data.name
-  data.path = paste0('../datamakers/', data.name, '/')
+  data.path = paste0('datamakers/', data.name, '/')
 
   genotype.path = paste0(data.path, 'gemma_genotype_', input$phenotype.id, '.txt.gz')
 
@@ -53,8 +53,7 @@ gemma.bslmm.wrapper = function(input, args){
   system(model_fitting_command)
   
   # predict traits for the test set  
-  train_predict_command = "-epm ./output/result.param.txt -emu ./output/result.log.txt -predict"
-  train_predict_command = paste(model_fitting_command, train_predict_command)
+  train_predict_command = "./gemma -o result -notsnp -epm ./output/result.param.txt -emu ./output/result.log.txt -predict"
   train_predict_command = paste(train_predict_command, "-g", genotype.path, "-p", train.phenotype.path)
   system(train_predict_command)
   

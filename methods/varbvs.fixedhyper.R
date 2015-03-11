@@ -6,7 +6,7 @@ varbvs.fixedhyper.wrapper = function(input,args){
 
   # locate the dataset
   data.name = input$data.name
-  data.path = paste0('../datamakers/', data.name, '/')
+  data.path = paste0('datamakers/', data.name, '/')
 
   # load in the dataset
   genotype.path = paste0(data.path, 'genotype.RData')
