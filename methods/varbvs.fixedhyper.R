@@ -12,7 +12,7 @@ varbvs.fixedhyper.wrapper = function(input,args){
   genotype.path = paste0(data.path, 'genotype.RData')
   load(genotype.path)
 
-  phenotype.path = paste0(data.path, 'phenotype_', input$phenotypeID, '.RData')
+  phenotype.path = paste0(data.path, 'phenotype_', input$phenotype.id, '.RData')
   load(phenotype.path)
 
   if (length(intersect(list.files(), 'relatedness.RData'))==0){
