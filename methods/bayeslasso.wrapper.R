@@ -6,7 +6,7 @@ bayeslasso.wrapper = function(input, args){
 
   # locate the dataset
   data.name = input$data.name
-  data.path = paste0('/home/maimaizhu/GitHub/dscr_blm/datamakers/', data.name, '/')
+  data.path = paste0('../datamakers/', data.name, '/')
 
   # load in the dataset
   genotype.path = paste0(data.path, 'genotype.RData')
@@ -31,9 +31,6 @@ bayeslasso.wrapper = function(input, args){
 	stop("individuals are not the same in genotype and phenotype")
 
   # defaul setting for blr routine
-  #nIter = 5500
-  #burnIn = 500
-  #thin = 1
   priorBL.default = list(varE=list(df=3,S=2.5),
 		 varU=list(df=3,S=0.63),
 		 lambda = list(shape=0.52,rate=1e-5,value=20,type='random'))
@@ -68,14 +65,13 @@ bayeslasso.wrapper = function(input, args){
   # run gibbs sampler to fit bayes lasso model
   library(BLR)
   if (is.null(A)){
-  	fm=BLR(y=YNA, XL=X, GF=NULL, prior=priorBL, nIter=nIter, burnIn=burnIn, thin=thin)
+  	fm=BLR(y=YNA, XL=X, GF=NULL, prior=priorBL, nIter=nIter, burnIn=burnIn, thin=thin, saveAt="result_")
   }else{
-	fm=BLR(y=YNA, XL=X, GF=list(ID=(1:nrow(A)),A=A), prior=priorBL, nIter=nIter, burnIn=burnIn, thin=thin)
+	fm=BLR(y=YNA, XL=X, GF=list(ID=(1:nrow(A)),A=A), prior=priorBL, nIter=nIter, burnIn=burnIn, thin=thin, saveAt="result_")
   }
 
   # output the posterior mean as predicted value
-  y.predict = fm$yHat[whichNA]
-  y.true = y[whichNA]
-  return(list(y.predict=y.predict, y.true=y.true)) 
+  y.test.predict = fm$yHat[whichNA]
+  return(list(predict=y.test.predict)) 
 
 }
