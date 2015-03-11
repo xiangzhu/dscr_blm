@@ -11,7 +11,7 @@ datamaker = function(args){
   data.name = args$data.name # name of data set
   phenotype.id = args$phenotype.id # id of phenotype
 
-  phenotype.path = paste0(data.name, '/', 'phenotype_', phenotype.id, '.RData')
+  phenotype.path = paste0('datamaker/', data.name, '/', 'phenotype_', phenotype.id, '.RData')
   load(phenotype.path)
   total.size = length(y)	
   if(test.size >= total.size){
