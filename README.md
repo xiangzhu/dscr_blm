@@ -63,7 +63,7 @@ Each datamaker function must return a `list(meta,input)` where `meta` and `input
 
 # Results
 
-Here is a simple illustration. It just proves that my dsc problem works under the framework of `dscr` pacakge. It is still an ardous journey to make sure every method wrapper is correctly coded and properly tuned, every dataset is cleaned, and every published result is (approximately) recovered.
+Here is a simple illustration. It just proves that my dsc problem works under the framework of `dscr` pacakge. It is still an ardous journey to make sure every method wrapper is correctly coded and properly tuned, every dataset is carefully cleaned, and every published result is (approximately) recovered.
 
 Below are the mean squared and absolute error of two methods (Bayes Lasso and Bayes Sparse Linear Mixed Models) on two test samples (size=100).
 
