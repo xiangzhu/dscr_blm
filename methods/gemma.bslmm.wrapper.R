@@ -42,7 +42,7 @@ gemma.bslmm.wrapper = function(input, args){
   
   # fit bslmm model using training set
   # turn off all the snp filters
-  model_fitting_command = "./gemma -o result -notsnp"
+  model_fitting_command = "methods/gemma -o result -notsnp"
   # specify the model type
   model_fitting_command = paste(model_fitting_command, "-bslmm", bslmm)
   # specify the training data
@@ -53,13 +53,16 @@ gemma.bslmm.wrapper = function(input, args){
   system(model_fitting_command)
   
   # predict traits for the test set  
-  train_predict_command = "./gemma -o result -notsnp -epm ./output/result.param.txt -emu ./output/result.log.txt -predict"
+  train_predict_command = "methods/gemma -o result -notsnp -epm ./output/result.param.txt -emu ./output/result.log.txt -predict"
   train_predict_command = paste(train_predict_command, "-g", genotype.path, "-p", train.phenotype.path)
   system(train_predict_command)
   
   # extract the useful info and delete the files/directories
   gemma.prdt = read.table('output/result.prdt.txt')
   y.test.predict = gemma.prdt[!is.na(gemma.prdt)]
+
+  # rmv training set and output directory
+  status = file.remove(train.phenotype.path)
   system('rm -rf output')
   
   return(list(predict=y.test.predict))   
