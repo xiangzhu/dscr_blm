@@ -1,12 +1,23 @@
-#This file should define your score function
-
 score = function(data, output){
-#insert calculations here; return a named list of results
+
+  # known truth: observed phenotypes in the test set
   true.value = data$meta$true.value
+  
+  # predicted phenotypes 
   predict = output$predict
-  mean_squared_error = mean( (true.value - predict)^2 )
-  mean_absolute_error = mean( abs(true.value - predict) )
-  return(list(mean_squared_error=mean_squared_error, mean_absolute_error=mean_absolute_error))
+  
+  # mean square error (mse)
+  mse = mean((true.value-predict)^2)
+  
+  # root mean square error (rmse)
+  rmse = sqrt(mean(abs(true.value-predict)))
+  
+  # pearson correlation
+  pcor = cor(predict, true.value)
+  
+  # simple regression slope
+  slope = lm(true.value~predict)$coef[2]
+  
+  return(list(mse=mse, rmse=rmse, pcor=pcor, slope=slope))
 }
 
-addScore(dsc_osl,score)
