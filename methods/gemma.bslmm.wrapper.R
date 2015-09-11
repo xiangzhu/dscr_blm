@@ -21,10 +21,8 @@ gemma.bslmm.wrapper = function(input, args){
 
   # default setting for gemma-bslmm
   bslmm = 1 # continuous trait
-  w = 1000
-  s = 100
-  #w = 100000 # burn-in
-  #s = 1000000 # total length of chain
+  w = 100000 # burn-in
+  s = 1000000 # total length of chain
   rpace = 10 # recording space 
   
   # user-specified setting for gemma-bslmm

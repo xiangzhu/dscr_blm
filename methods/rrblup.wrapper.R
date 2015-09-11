@@ -1,5 +1,4 @@
 rrblup.wrapper = function(input, args){
-  library(rrBLUP)
   
   # load dataset
   data.name = input$data.name
