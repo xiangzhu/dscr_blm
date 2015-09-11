@@ -7,15 +7,16 @@ output: pdf_document
 
 This vignette is designed to illustrate the application of [`dscr`](https://github.com/stephens999/dscr) package in genomic prediction.
 
-We will assess four methods for genotype-based prediction on a public wheat dataset. This dataset is available in [`BLR`](https://cran.r-project.org/web/packages/BLR/) package. We will compare four methods: Bayes Lasso (from `BLR` package), BSLMM (from [`GEMMA`](https://github.com/xiangzhou/GEMMA) software), rrBLUP and rrBLUP with a Gaussian kernel (from [`rrBLUP`](https://cran.r-project.org/web/packages/rrBLUP/) pacakge).
+We will assess four methods for genotype-based prediction on a public wheat dataset. This dataset is available in [`BLR`](https://cran.r-project.org/web/packages/BLR/) package. We will compare four methods: Bayes Lasso (from `BLR` package), BSLMM (from [`GEMMA`](https://github.com/xiangzhou/GEMMA) software), rrBLUP and rrBLUP with a Gaussian kernel (from [`rrBLUP`](https://cran.r-project.org/web/packages/rrBLUP/) package).
 
 ## Quick start
 
-1. Download the [repository](https://github.com/xiangzhu/dscr_blm) from `GitHub`.
+Step 1. Download the [repository](https://github.com/xiangzhu/dscr_blm) from `GitHub`.
 ```bash
 wget https://github.com/xiangzhu/dscr_blm/archive/master.zip
 unzip master.zip
 rm master.zip
+mv dscr_blm-master dscr_blm
 ```
 After this step, there is a local `dscr_blm` folder.
 ```bash
@@ -31,7 +32,7 @@ drwxrwxr-x 2 xiangzhu xiangzhu   4096 Sep 10 17:37 methods
 -rw-rw-r-- 1 xiangzhu xiangzhu   6503 Sep 11 15:17 vignette.Rmd
 ```
  
-2. Install the required `R` packages.
+Step 2. Install the required `R` packages.
 ```{r,eval=FALSE}
 # for dsc 
 install.packages("devtools")
@@ -44,7 +45,7 @@ install.packages("rrBLUP")
 install.packages("BGLR")
 ```
 
-3. Go to the local `dscr_blm` directory. Start an `R` console and run `run_dsc.R`.
+Step 3. Go to the local `dscr_blm` directory. Start an `R` console and run `run_dsc.R`.
 ```{r,eval=FALSE}
 source('run_dsc.R')
 ```
@@ -64,11 +65,7 @@ drwxrwxr-x 2 xiangzhu xiangzhu   4096 Sep 10 17:37 methods
 ```
 
 ## Step-by-step illustration 
-
-If `dscr` package is used for the first time, the following installation is necessary.
-
-
-First load the library, and initialize a new `dsc` using `new_dsc`. This object will be used to store the details of the dsc.
+First load the library, and initialize a new dynamic statistical comparison (dsc) using `new_dsc`. This object will be used to store the details of the dsc.
 ```{r,eval=FALSE}
 library(dscr)
 dsc_blm = new_dsc("genomic_prediction","dsc_blm")
@@ -82,7 +79,7 @@ Now define the function `datamaker` to create data, which consists of `input` an
 
 and the `meta` is a list with one element, `meta$true.value`, the observed phenotypes in the test set. The `datamaker` function takes a single parameter `args`, which is a list with three elements: `args$data.name`, `args$phenotype.id` (same as `input`) and `args$test.size` (the sample size of test set, integer). The function `datamaker.R` is in folder `datamaker/`.
 
-Now use `datamaker` to define scenarios. Each scenario is determined by the datamaker, its arguments and the random seeds it uses. The name `wheat` is used for naming the scenario in results and also ouput directories.
+Now use `datamaker` to define scenarios. Each scenario is determined by the datamaker, its arguments and the random seeds it uses. The name `wheat` is used for naming the scenario in results and also output directories.
 ```{r,eval=FALSE}
 source_dir("datamakers") # need datamaker to create scenarios
 
@@ -149,7 +146,7 @@ Now we can summarize the comparison results. For example, look at the median `rm
 We call this framework "dynamic comparison" because one can add new data, new methods and new score metrics to the existing comparisons.
 
 ### Add a dataset
-In my current implementation, this part is not automatic. For each dataset, I first manually pre-process it such that the wrapper functions can use the data conviniently. For example, in the directory `/datamakers/wheat`, there are two `R` scripts to prepare the wheat data for comparison.  
+In my current implementation, this part is not automatic. For each dataset, I first manually pre-process it such that the wrapper functions can use the data conveniently. For example, in the directory `/datamakers/wheat`, there are two `R` scripts to prepare the wheat data for comparison.  
 ```bash
 -rw-rw-r-- 1 xiangzhu xiangzhu    935 Sep 10 13:47 dataprep_gemma.R
 -rw-rw-r-- 1 xiangzhu xiangzhu    356 Sep 10 13:47 dataprep_rtool.R
@@ -181,4 +178,15 @@ Now the new method and its results will show up in the data frame `res`.
 ### Add a score
 Simply modify the script `score.R` by adding a new score metric as an element of the list. 
 
+## Miscellaneous
 
+### Session information of `R`
+```{r,include=FALSE}
+source('run_dsc.R')
+```
+```{r,echo=FALSE}
+sessionInfo()
+```
+
+### `GEMMA` software
+I include a binary executable `GEMMA` in the repository, and it works in my laptop, home desktop and office desktop (all Linux machines). Unfortunately, it cannot run on Mac system, and I do not try it on Windows. If you are not using Linux, I suggest delete the `gemma` in the folder `methods/`, compile a new `gemma` in your local machine, and move it to `methods/`. The source code of `GEMMA` is available at [`https://github.com/xiangzhou/GEMMA`](https://github.com/xiangzhou/GEMMA). 
