@@ -1,6 +1,9 @@
-sourceDir("methods")
-#now for each method define a list with its name, function and arguments (if no additional arguments use NULL)
+suppressPackageStartupMessages(library(BLR)) # for bayeslasso
+suppressPackageStartupMessages(library(rrBLUP)) # for rrblup and rrblup.gkernel
 
-addMethod(dsc_osl, name="bayes_lasso", fn=bayeslasso.wrapper, args=list(nIter=NULL, burnIn=NULL, thin=NULL, priorBL=list()))
-addMethod(dsc_osl, name="varbvs_fixed", fn=varbvs.fixedhyper.wrapper, args=list(sigma=NULL, sa=NULL, logodds=NULL))
-addMethod(dsc_osl, name="gemma_bslmm", fn=gemma.bslmm.wrapper, args=list(bslmm=NULL, w=NULL, s=NULL)) 
+source_dir("methods")
+
+add_method(dsc_blm, name="bayes_lasso", fn=bayeslasso.wrapper, args=list(nIter=1.1e4,burnIn=1e3))
+add_method(dsc_blm, name="gemma_bslmm", fn=gemma.bslmm.wrapper, args=list(w=1.1e4,s=1e3)) 
+add_method(dsc_blm, name="rrblup", fn=rrblup.wrapper, args=list())
+add_method(dsc_blm, name="rrblup_kernel", fn=rrblup.gkernel.wrapper, args=list()) 

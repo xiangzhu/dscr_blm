@@ -10,7 +10,7 @@ score = function(data, output){
   mse = mean((true.value-predict)^2)
   
   # root mean square error (rmse)
-  rmse = sqrt(mean(abs(true.value-predict)))
+  rmse = sqrt(mean((true.value-predict)^2))
   
   # pearson correlation
   pcor = cor(predict, true.value)
@@ -21,3 +21,4 @@ score = function(data, output){
   return(list(mse=mse, rmse=rmse, pcor=pcor, slope=slope))
 }
 
+add_score(dsc_blm,score)
